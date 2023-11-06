@@ -11,7 +11,7 @@ class NotesApp extends React.Component {
 
     this.state = {
       notes: getInitialData(),
-      inputSearch : "",
+      searchCatatan : "",
     }
 
     autoBind(this)
@@ -25,9 +25,9 @@ class NotesApp extends React.Component {
   onArchiveHandler(id) {
     this.setState((prevState)=>{
       return {
-        prevState : prevState.notes.map((note)=>(
+        prevState : prevState.notes.map(note => 
           note.id === id ? (note.archived = !note.archived) : note
-        ))
+        )
       }
     })
   }
@@ -49,34 +49,31 @@ class NotesApp extends React.Component {
     })
   }
 
-  onSearchHandler(event){
+  onSearchHandler(event) {
     this.setState({
-      inputSearch : event.target.value
-    })
+      searchCatatan: event.target.value,
+    });
   }
 
-  searchNotes(){
-    const { notes, inputSearch } = this.state
-    return (
-      notes.filter((note) => {
-        note.title.toLowerCase().includes(inputSearch.toLowerCase())
-      })  
-    )
-  }
-
+  searchNotes() {
+    const { notes, searchCatatan } = this.state;
+    return notes.filter((note) =>
+      note.title.toLowerCase().includes(searchCatatan.toLowerCase())
+    );
+  };
   render() {
-    const activeNotes = this.state.notes.filter((note) => note.archived === false)
-    const archiveNotes = this.state.notes.filter((note) => note.archived === true)
+    const activeNotes = this.searchNotes().filter((note) => note.archived === false)
+    const archiveNotes = this.searchNotes().filter((note) => note.archived === true);
 
     return (
       <div className="note-app">
-        <NoteHeader inputSearch={this.state.inputSearch} onSearch={this.onSearchHandler}/>
+        <NoteHeader inputSearch={this.state.searchCatatan} onSearch={this.onSearchHandler}/>
         <div className="note-app__body">
           <NoteInput addNote={this.onAddNoteHandler}/>
           <h2>Catatan Aktif</h2>
-          <NotesList notes={activeNotes} onDelete={this.onDeleteHandler} onArchive={this.onArchiveHandler}/>
+          <NotesList key={activeNotes.id} notes={activeNotes} onDelete={this.onDeleteHandler} onArchive={this.onArchiveHandler} />
           <h2>Arsip</h2>
-          <NotesList notes={archiveNotes} onDelete={this.onDeleteHandler} onArchive={this.onArchiveHandler}/>
+          <NotesList key= {archiveNotes.id} notes={archiveNotes} onDelete={this.onDeleteHandler} onArchive={this.onArchiveHandler} />
         </div>
       </div>
     )

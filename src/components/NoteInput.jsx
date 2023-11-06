@@ -8,21 +8,19 @@ class NoteInput extends React.Component {
     this.state = {
       title : '',
       body : '',
+      limit: 50,
     }
 
     autoBind(this)
   }
 
-  onLimitCharHandler(text, limit){
-    return limit - text.length
-  }
-
   onChangeTitle(event){
-    this.setState(()=>{
-      return {
-        title : event.target.value
-      }
-    })
+    const newTitle = event.target.value
+    if(newTitle.length <= this.state.limit)[
+      this.setState({
+        title: newTitle
+      })
+    ]
   }
 
   onChangeBody(event){
@@ -39,15 +37,17 @@ class NoteInput extends React.Component {
   }
 
   render() {
-    const { title } = this.state
-    const titleLimitChar = this.onLimitCharHandler(title, 50)
-
     return (
       <div className="note-input">
         <h2>Buat Catatan</h2>
-        <p className="note-input__title__char-limit">Sisa Karakter : {titleLimitChar}</p>
+        <p className="note-input__title__char-limit">Sisa Karakter : {this.state.limit - this.state.title.length}</p>
         <form>
-          <input id="note-input__title" type="text" placeholder="Masukkan judul..." maxLength={50} value={this.state.title} onChange={this.onChangeTitle} />
+          <input 
+          id="note-input__title" 
+          type="text" 
+          placeholder="Masukkan judul..." 
+          value={this.state.title} 
+          onChange={this.onChangeTitle} />
           <textarea name="input-body" id="note-input__body" cols="30" rows="10" placeholder="Tulis catatanmu disini..." value={this.state.body} onChange={this.onChangeBody}></textarea>
           <button type="submit" onClick={this.onSubmitEventHandler}>Buat</button>
         </form>

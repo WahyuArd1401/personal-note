@@ -1,3 +1,4 @@
+import React from "react";
 import NoteSearch from "./NoteSearch";
 
 function NoteHeader({ inputSearch, onSearch }){
