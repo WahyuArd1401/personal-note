@@ -3,13 +3,13 @@ import DeleteButton from "./DeleteButton";
 import NoteItemContent from "./NoteItemContent";
 import { showFormattedDate } from "../utils/index";
 
-function NoteItem({ id, title, createdAt, body, onDelete, onArchive }) {
+function NoteItem({ id, title, createdAt, body, archived, onDelete, onArchive }) {
   return (
     <div className="note-item">
       <NoteItemContent title={title} createdAt={showFormattedDate(createdAt)} body={body} />
       <div className="note-item__action">
         <DeleteButton id={id} onDelete={onDelete} />
-        <ArchiveButton id={id} onArchive={onArchive} />
+        <ArchiveButton id={id} onArchive={onArchive}>{archived? "Pindahkan" : "Arsipkan"}</ArchiveButton>
       </div>
     </div>
   )

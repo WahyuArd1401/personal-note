@@ -11,6 +11,7 @@ class NotesApp extends React.Component {
 
     this.state = {
       notes: getInitialData(),
+      inputSearch : "",
     }
 
     autoBind(this)
@@ -22,7 +23,13 @@ class NotesApp extends React.Component {
   }
 
   onArchiveHandler(id) {
-    return
+    this.setState((prevState)=>{
+      return {
+        prevState : prevState.notes.map((note)=>(
+          note.id === id ? (note.archived = !note.archived) : note
+        ))
+      }
+    })
   }
 
   onAddNoteHandler({ title, body}){
@@ -33,7 +40,7 @@ class NotesApp extends React.Component {
           {
             id: +new Date(),
             title,
-            createdAt: new Date(),
+            createdAt: new Date().toISOString(),
             body,
             archived: false
           }
@@ -42,16 +49,34 @@ class NotesApp extends React.Component {
     })
   }
 
+  onSearchHandler(event){
+    this.setState({
+      inputSearch : event.target.value
+    })
+  }
+
+  searchNotes(){
+    const { notes, inputSearch } = this.state
+    return (
+      notes.filter((note) => {
+        note.title.toLowerCase().includes(inputSearch.toLowerCase())
+      })  
+    )
+  }
+
   render() {
+    const activeNotes = this.state.notes.filter((note) => note.archived === false)
+    const archiveNotes = this.state.notes.filter((note) => note.archived === true)
 
     return (
       <div className="note-app">
-        <NoteHeader />
+        <NoteHeader inputSearch={this.state.inputSearch} onSearch={this.onSearchHandler}/>
         <div className="note-app__body">
           <NoteInput addNote={this.onAddNoteHandler}/>
           <h2>Catatan Aktif</h2>
-          <NotesList notes={this.state.notes} onDelete={this.onDeleteHandler} onArchive={this.onArchiveHandler} />
+          <NotesList notes={activeNotes} onDelete={this.onDeleteHandler} onArchive={this.onArchiveHandler}/>
           <h2>Arsip</h2>
+          <NotesList notes={archiveNotes} onDelete={this.onDeleteHandler} onArchive={this.onArchiveHandler}/>
         </div>
       </div>
     )

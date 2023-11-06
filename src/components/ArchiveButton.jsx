@@ -1,5 +1,5 @@
-function ArchiveButton({ id, onArchive}){
-  return <button className="note-item__archive-button" onClick={()=> onArchive(id)}>Archive</button>
+function ArchiveButton({ id, onArchive, children}){
+  return <button className="note-item__archive-button" onClick={()=> onArchive(id)}>{children}</button>
 }
 
 export default ArchiveButton
